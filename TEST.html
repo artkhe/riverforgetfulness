@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display a style switcher control</title>
+  <script src="https://cdn.maptiler.com/maplibre-gl-js/v2.4.0/maplibre-gl.js"></script>
+  <link href="https://cdn.maptiler.com/maplibre-gl-js/v2.4.0/maplibre-gl.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+      const key = 'YOUR_MAPTILER_API_KEY_HERE';
+      const map = new maplibregl.Map({
+        container: 'map', // container's id or the HTML element in which MapLibre GL JS will render the map
+        style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${key}`, // style URL
+        center: [16.611342, 49.197304], // starting position [lng, lat]
+        zoom: 12, // starting zoom
+
+
+
+        const baseMaps = {
+  "2022": {
+    name: "2022",
+    img: ""C:\Users\Sofia\Downloads\2022-1670697313480.png""
+  },
+  "1988": {
+    name: "1998",
+    img: ""C:\Users\Sofia\Downloads\1990-1670697423112.png""
+  },
+  "1800": {
+    name: "1800",
+    img: ""C:\Users\Sofia\Downloads\1800.jpg""
+  }
+
+
+
+  const initialStyle = Object.keys(baseMaps)[0];
+const map = new mapboxgl.Map({
+  container: 'map', // container id
+  style: `mapbox://styles/sofiayanezpg/clb6iab1r003o14nt17eposzp`, // style URL
+  center: [], // starting position [lng, lat]
+  zoom: 12 // starting zoom
+  class styleSwitcherControl {
+
+constructor(options) {
+  this._options = {...options};
+  this._container = document.createElement("div");
+  this._container.classList.add("maplibregl-ctrl");
+  this._container.classList.add("maplibregl-ctrl-basemaps");
+  this._container.classList.add("closed");
+  switch (this._options.expandDirection || "right") {
+      case "top":
+          this._container.classList.add("reverse");
+      case "down":
+          this._container.classList.add("column");
+          break;
+      case "left":
+          this._container.classList.add("reverse");
+      case "right":
+          this._container.classList.add("row");
+  }
+  this._container.addEventListener("mouseenter", () => {
+      this._container.classList.remove("closed");
+  });
+  this._container.addEventListener("mouseleave", () => {
+      this._container.classList.add("closed");
+  });
+}
+
+onAdd(map) {
+  this._map = map;
+  const basemaps = this._options.basemaps;
+  Object.keys(basemaps).forEach((layerId) => {
+    const base = basemaps[layerId];
+    const basemapContainer = document.createElement("img");
+    basemapContainer.src = base.img;
+    basemapContainer.classList.add("basemap");
+    basemapContainer.dataset.id = layerId;
+    basemapContainer.addEventListener("click", () => {
+      const activeElement = this._container.querySelector(".active");
+      activeElement.classList.remove("active");
+      basemapContainer.classList.add("active");
+      let url_content = `https://api.maptiler.com/maps/${layerId}/style.json?key=${key}`
+      map.setStyle(url_content, {diff: false});
+    });
+    basemapContainer.classList.add("hidden");
+    this._container.appendChild(basemapContainer);
+    if (this._options.initialBasemap === layerId) {
+        basemapContainer.classList.add("active");
+    }
+  });
+  return this._container;
+}
+
+onRemove(){
+  this._container.parentNode?.removeChild(this._container);
+  delete this._map;
+}
+}
+map.addControl(new styleSwitcherControl({basemaps: baseMaps, initialBasemap: initialStyle}), 'bottom-left');
+JavaScript
+Create the styleSwitcherControl css style. Add the SwitcherControl style to you stylesheet.
+
+/*layerSwitcherControl*/
+.maplibregl-ctrl-basemaps {
+display: flex;
+flex-direction: row;
+pointer-events: auto;
+bottom: 15px;
+position: relative;
+}
+.maplibregl-ctrl-basemaps.reverse {
+flex-direction: row-reverse;
+}
+.maplibregl-ctrl-basemaps.column {
+flex-direction: column;
+}
+.maplibregl-ctrl-basemaps.column.reverse {
+flex-direction: column-reverse;
+}
+.maplibregl-ctrl-basemaps .basemap {
+width: 64px;
+height: 64px;
+margin: 2px;
+border: 2px solid 
+#ccc;
+box-shadow: 0 1px 5px 
+rgba(0, 0, 0, 0.65);
+cursor: pointer;
+}
+.maplibregl-ctrl-basemaps .basemap.active {
+border-color: 
+orange;
+box-shadow: 2px 2px 4px 
+#000;
+}
+.maplibregl-ctrl-basemaps.closed .basemap {
+display: none;
+}
+.maplibregl-ctrl-basemaps.closed .basemap.active {
+display: block;
+border: 2px solid 
+#ccc;
+}
+
+
+
+
+});
+
+
+
+
+}
+      });
+      map.addControl(new maplibregl.NavigationControl(), 'top-right');
+  </script>
+</body>
+</html>
+

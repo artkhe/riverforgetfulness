@@ -1,0 +1,29 @@
+map.on('load', () => { 
+        
+        map.addSource('mechanism', {
+
+            type: 'geojson',
+            data:'C:/Users/Sofia/Desktop/INTERACTIVE_MAP_CODE/mechanism.geojson'
+        })
+        map.addLayer({
+            id:'mechanism-fill',
+            type:'polygon',
+            source:'mechanism',
+            'layout': {}
+    })
+
+    })
+
+
+
+
+
+
+
+    document.querySelector('#mechanism_button').addEventListener('click', ()=> {
+   
+    })
+
+
+
+    
