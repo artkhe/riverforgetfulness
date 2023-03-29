@@ -7,6 +7,8 @@
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'>
 </script>
+<script src='src/index.js'>
+</script>
 <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
 <style>
     .mapbox-ctrl-styles {
@@ -114,9 +116,11 @@ html, body {
 
     <div id="container">
           <div id="sidebar">
-            <button id="lindoso-dam">LINDOSO DAM</button>{padding: 30px}
-            <button id="as-conchas-dam">AS CONCHAS DAM</button>{padding: 30px}
-            <button id="salas-dam">SALAS DAM</button>{padding: 30px}
+            <button id="lindoso-dam" style="padding: 8px">LINDOSO DAM</button>
+            <br></br>
+            <button id="as-conchas-dam" style="padding: 8px">AS CONCHAS DAM</button>
+            <br></br>
+            <button id="salas-dam" style="padding: 8px">SALAS DAM</button>
 
           </div>
 
@@ -130,7 +134,7 @@ html, body {
         mapEl.setAttribute('id', 'map');
         document.body.appendChild(mapEl);
 
-        mapboxgl.accessToken = '{your-token}';
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic29maWF5YW5lenBnIiwiYSI6ImNsYjUzZWN3dTAwcXEzcHBuOHYya25xdjUifQ.2s1OBK6tW5FWXfrFZgeY3A';
 
         var map = new mapboxgl.Map({
         container: 'map',
