@@ -121,6 +121,8 @@ html, body {
             <button id="as-conchas-dam" style="padding: 8px">AS CONCHAS DAM</button>
             <br></br>
             <button id="salas-dam" style="padding: 8px">SALAS DAM</button>
+            <br></br>
+            <button id="pollution-button" style="padding: 8px">POLLUTION</button>
 
           </div>
 
@@ -239,7 +241,44 @@ map.on('load', function() { map.addControl(new StyleSwitcherControl()); });
     })
 })
 
+map.on('load', () => {
+        // Add a data source containing GeoJSON data.
+        map.addSource('maine', {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    // These coordinates outline Maine.
+                    'coordinates': [ geojsons/greenbutton/greenline.geojson
+                    ]
+                }
+            }
+        });
 
+        // Add a new layer to visualize the polygon.
+        map.addLayer({
+            'id': 'maine',
+            'type': 'fill',
+            'source': 'maine', // reference the data source
+            'layout': {},
+            'paint': {
+                'fill-color': '#0080ff', // blue color fill
+                'fill-opacity': 0.5
+            }
+        });
+        // Add a black outline around the polygon.
+        map.addLayer({
+            'id': 'outline',
+            'type': 'line',
+            'source': 'maine',
+            'layout': {},
+            'paint': {
+                'line-color': '#000',
+                'line-width': 3
+            }
+        });
+    });
 
 
     </script>
