@@ -122,7 +122,13 @@ html, body {
             <br></br>
             <button id="salas-dam" style="padding: 8px">SALAS DAM</button>
             <br></br>
+            <br></br>
+            <br></br>
             <button id="pollution-button" style="padding: 8px">POLLUTION</button>
+            <br></br>
+            <button id="mechanism-button" style="padding: 8px">MECHANISM</button>
+            <br></br>
+            <button id="policy-button" style="padding: 8px">POLICY</button>
 
           </div>
 
@@ -275,10 +281,10 @@ document.querySelector('#pollution-button').addEventListener('click', () => {
                     id: 'pollution-layer-lines',
                     // References the GeoJSON source defined above
                     // and does not require a `source-layer`
-                    source: 'pollution-data-lines',
+                    source: 'pollution-data',
                     type: 'line',
                     paint: {
-                        'line-color': '#00ff00',
+                        'line-color': '#000000',
                         'line-width': 3,
                     }
                 });
