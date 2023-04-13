@@ -247,7 +247,51 @@ map.on('load', function() { map.addControl(new StyleSwitcherControl()); });
     })
 })
 
-document.querySelector('#pollution-button').addEventListener('click', () => {
+document.querySelector('#mechanism-button').addEventListener('click', () => {
+            if (map.getLayer('mechanism-layer')) {
+                console.log('removing');
+                map.removeLayer('mechanism-layer');
+            } else {
+                console.log('adding');
+                if (!map.getSource('mechanism-data')) {
+                    map.addSource('mechanism-data', {
+                        type: 'geojson',
+                        data: 'geojsons/redbutton/redpoli.geojson'
+                    });
+
+                    map.addSource('mechanism-data-lines', {
+                        type: 'geojson',
+                        data: 'geojsons/redbutton/redline.geojson'
+                    });
+                }
+
+                map.addLayer({
+                    id: 'mechanism-layer',
+                    // References the GeoJSON source defined above
+                    // and does not require a `source-layer`
+                    source: 'mechanism-data',
+                    type: 'fill',
+                    paint: {
+                        'fill-color': '#ff0000',
+                        'fill-opacity': 0.5,
+                    }
+                });
+
+                map.addLayer({
+                    id: 'mechanism-layer-lines',
+                    // References the GeoJSON source defined above
+                    // and does not require a `source-layer`
+                    source: 'mechanism-data',
+                    type: 'line',
+                    paint: {
+                        'line-color': '#ff0000',
+                        'line-width': 0.5,
+                    }
+                });
+            }
+        })
+
+        document.querySelector('#pollution-button').addEventListener('click', () => {
             if (map.getLayer('pollution-layer')) {
                 console.log('removing');
                 map.removeLayer('pollution-layer');
@@ -256,19 +300,17 @@ document.querySelector('#pollution-button').addEventListener('click', () => {
                 if (!map.getSource('pollution-data')) {
                     map.addSource('pollution-data', {
                         type: 'geojson',
-                        data: 'geojsons/redbutton/redpoli.geojson'
+                        data: 'geojsons/greenbutton/greenpoligons.geojson'
                     });
 
                     map.addSource('pollution-data-lines', {
                         type: 'geojson',
-                        data: 'geojsons/redbutton/redline.geojson'
+                        data: 'geojsons/greenbutton/greenline.geojson'
                     });
                 }
 
                 map.addLayer({
                     id: 'pollution-layer',
-                    // References the GeoJSON source defined above
-                    // and does not require a `source-layer`
                     source: 'pollution-data',
                     type: 'fill',
                     paint: {
@@ -279,17 +321,16 @@ document.querySelector('#pollution-button').addEventListener('click', () => {
 
                 map.addLayer({
                     id: 'pollution-layer-lines',
-                    // References the GeoJSON source defined above
-                    // and does not require a `source-layer`
                     source: 'pollution-data',
                     type: 'line',
                     paint: {
-                        'line-color': '#000000',
-                        'line-width': 3,
+                        'line-color': '#00ff00',
+                        'line-width': 0.5,
                     }
                 });
             }
         })
+
 
 
         
