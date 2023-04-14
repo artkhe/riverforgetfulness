@@ -276,12 +276,24 @@ document.querySelector('#mechanism-button').addEventListener('click', () => {
                         'fill-opacity': 0.5,
                     }
                 });
+                
+                if (!map.getSource('mechanism-data')) {
+                    map.addSource('mechanism-data', {
+                        type: 'geojson',
+                        data: 'geojsons/redbutton/redpoli.geojson'
+                    });
+
+                    map.addSource('mechanism-data-lines', {
+                        type: 'geojson',
+                        data: 'geojsons/redbutton/redline.geojson'
+                    });
+                }
 
                 map.addLayer({
-                    id: 'mechanism-layer-lines',
+                    id: 'mechanism-layer',
                     // References the GeoJSON source defined above
                     // and does not require a `source-layer`
-                    source: 'mechanism-data',
+                    source: 'mechanism-data-lines',
                     type: 'line',
                     paint: {
                         'line-color': '#ff0000',
@@ -305,7 +317,7 @@ document.querySelector('#mechanism-button').addEventListener('click', () => {
 
                     map.addSource('pollution-data-lines', {
                         type: 'geojson',
-                        data: 'geojsons/greenbutton/greenline.geojson'
+                        data: 'geojsons/greenbutton/greenline2.geojson'
                     });
                 }
 
