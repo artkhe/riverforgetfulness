@@ -1,121 +1,134 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>Display a map on a webpage</title>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'>
-</script>
-<script src='src/index.js'>
-</script>
-<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
-<style>
-    .mapbox-ctrl-styles {
-        background-color: rgb(255, 255, 255);
-        border-radius: 4px;
-        box-shadow: 0 0 0 2px rgba(0,0,0,.1);
-        font: 12px/20px Helvetica Neue,Arial,Helvetica,sans-serif;
-    }
-    .style-button {
-        width: 60px;
-        height: 60px;
-        cursor: pointer;
-        background-size: 60px 60px;
-        background-position: 50%;
-    }
-    .style-button:not([class$="style-current"]):first-child {
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-    }
-    .style-button:not([class$="style-current"]):last-child {
-        border-bottom-left-radius: 4px;
-        border-bottom-right-radius: 4px;
-    }
-    .styles-current {
-        display: none;
-    }
-    .mapboxgl-ctrl.mapbox-ctrl-styles{
-        background-color: rgba(0,0,0,0);
-        box-shadow: none;
-    }
-    div.style-button.style-1990{
-        background-image: url("miniatura_1989.png") !important;
-        border: solid 1px;
-        border-color: black;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    div.style-button.style-2022{
-        background-image: url("miniatura_2022.png") !important;
-        border: solid 1px;
-        border-color: black;
-    }
-    div.style-button.style-1800{
-        background-image: url("1800.png") !important;
-        border: solid 1px;
-        border-color: black;
-    }
-    div.style-button.style-mechanism{
-        background-image: url("mechanism.png") !important;
-        border: solid 1px;
-        border-color: red;
-        margin-top: 400px;
-        margin-bottom: 10px;
-    }
-    div.style-button.style-policy{
-        background-image: url("policy.png") !important;
-        border: solid 1px;
-        border-color: blue;
-        margin-bottom: 10px;
-    }
-    div.style-button.style-pollution{
-        background-image: url("pollution.png") !important;
-        border: solid 1px;
-        border-color: greenyellow;
-        margin-bottom: 10px;
-    }
+    <meta charset="utf-8">
+    <title>Display a map on a webpage</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'>
+    </script>
+    <script src='src/index.js'>
+    </script>
+    <script src="https://unpkg.com/three@0.126.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        .mapbox-ctrl-styles {
+            background-color: rgb(255, 255, 255);
+            border-radius: 4px;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, .1);
+            font: 12px/20px Helvetica Neue, Arial, Helvetica, sans-serif;
+        }
+
+        .style-button {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            background-size: 60px 60px;
+            background-position: 50%;
+        }
+
+        .style-button:not([class$="style-current"]):first-child {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .style-button:not([class$="style-current"]):last-child {
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .styles-current {
+            display: none;
+        }
+
+        .mapboxgl-ctrl.mapbox-ctrl-styles {
+            background-color: rgba(0, 0, 0, 0);
+            box-shadow: none;
+        }
+
+        div.style-button.style-1990 {
+            background-image: url("miniatura_1989.png") !important;
+            border: solid 1px;
+            border-color: black;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        div.style-button.style-2022 {
+            background-image: url("miniatura_2022.png") !important;
+            border: solid 1px;
+            border-color: black;
+        }
+
+        div.style-button.style-1800 {
+            background-image: url("1800.png") !important;
+            border: solid 1px;
+            border-color: black;
+        }
+
+        div.style-button.style-mechanism {
+            background-image: url("mechanism.png") !important;
+            border: solid 1px;
+            border-color: red;
+            margin-top: 400px;
+            margin-bottom: 10px;
+        }
+
+        div.style-button.style-policy {
+            background-image: url("policy.png") !important;
+            border: solid 1px;
+            border-color: blue;
+            margin-bottom: 10px;
+        }
+
+        div.style-button.style-pollution {
+            background-image: url("pollution.png") !important;
+            border: solid 1px;
+            border-color: greenyellow;
+            margin-bottom: 10px;
+        }
 
 
 
 
 
-html, body { 
-    margin: 0; 
-    padding: 0; 
-    height: 100%; 
-}
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
 
-#map { 
-    
-    flex-grow: 1;
-    width: 100%;
-     }
+        #map {
 
-#container {
-    display: flex;
-    height: 100%;
-}
+            flex-grow: 1;
+            width: 100%;
+        }
 
-#sidebar {
-    width: 150px;
-    flex-shrink: 0;
-    height: 100%;
-    padding: 30px ;
-    opacity: 50%;
-    background-color: black;
-}
+        #container {
+            display: flex;
+            height: 100%;
+        }
 
-#topbar 
+        #sidebar {
+            width: 150px;
+            flex-shrink: 0;
+            height: 100%;
+            padding: 30px;
+            opacity: 50%;
+            background-color: black;
+        }
 
-</style>
+        #topbar
+    </style>
 </head>
 
 <body>
     <script src="index.js"></script>
 
     <div id="container">
-          <div id="sidebar">
+        <div id="sidebar">
             <button id="lindoso-dam" style="padding: 8px">LINDOSO DAM</button>
             <br></br>
             <button id="as-conchas-dam" style="padding: 8px">AS CONCHAS DAM</button>
@@ -130,10 +143,10 @@ html, body {
             <br></br>
             <button id="policy-button" style="padding: 8px">POLICY</button>
 
-          </div>
+        </div>
 
 
-          <div id='map'></div>  
+        <div id='map'></div>
     </div>
 
 
@@ -145,109 +158,111 @@ html, body {
         mapboxgl.accessToken = 'pk.eyJ1Ijoic29maWF5YW5lenBnIiwiYSI6ImNsYjUzZWN3dTAwcXEzcHBuOHYya25xdjUifQ.2s1OBK6tW5FWXfrFZgeY3A';
 
         var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/sofiayanezpg/clb6iab1r003o14nt17eposzp',
-        zoom:'11',
-        center:[41.929,-8.029]
-});
-
-    
-map.on('load', function() { map.addControl(new StyleSwitcherControl()); });
-
-      mapboxgl.accessToken = 'pk.eyJ1Ijoic29maWF5YW5lenBnIiwiYSI6ImNsYjUzZWN3dTAwcXEzcHBuOHYya25xdjUifQ.2s1OBK6tW5FWXfrFZgeY3A';
-      var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/sofiayanezpg/clb6iab1r003o14nt17eposzp',
-        
-
-      });
+            container: 'map',
+            style: 'mapbox://styles/sofiayanezpg/clb6iab1r003o14nt17eposzp',
+            zoom: '11',
+            center: [41.929, -8.029]
+        });
 
 
-     
-        map.on('load', function() { map.addControl(new StyleSwitcherControl({
-        styles: [
-        {
-            uri: 'mapbox://styles/sofiayanezpg/clb6iab1r003o14nt17eposzp',
-            title: '2022',
-            className: 'style-2022'
-        },
-        {
-            uri: 'mapbox://styles/sofiayanezpg/clbgumxvh007m14rrxgnrlr10',
-            title: '1990',
-            className: 'style-1990'
-        },
-        {
-            uri: 'mapbox://styles/sofiayanezpg/clbgwjcyl007u14rr9js3txt8',
-            title: '1800',
-            className: 'style-1800'
-        },
-        {
-            uri: 'mapbox://styles/sofiayanezpg/clblgyy2e000414pihifg72bg',
-            title: 'mechanism',
-            className: 'style-mechanism'
-        },
-        {
-            uri: 'mapbox://styles/sofiayanezpg/clblh6kjq000l14p5ipgslumu',
-            title: 'pollution',
-            className: 'style-pollution'
-        },
-        {
-            uri: 'mapbox://styles/sofiayanezpg/clblhhmd5002d15ns63q9b10n',
-            title: 'policy',
-            className: 'style-policy'
-        }
-        
 
 
-    ]
-}
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic29maWF5YW5lenBnIiwiYSI6ImNsYjUzZWN3dTAwcXEzcHBuOHYya25xdjUifQ.2s1OBK6tW5FWXfrFZgeY3A';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/sofiayanezpg/clb6iab1r003o14nt17eposzp',
 
-)); });
+
+        });
 
 
-      const popup = new mapboxgl.Popup({ offset: 25 }).setText('Flooded aceredo'
-      );
-      new mapboxgl.Marker({
-        scale: 0.5,
-        color:'#57fa7d',
-        
+
+        map.on('load', function () {
+            map.addControl(new StyleSwitcherControl({
+                styles: [
+                    {
+                        uri: 'mapbox://styles/sofiayanezpg/clb6iab1r003o14nt17eposzp',
+                        title: '2022',
+                        className: 'style-2022'
+                    },
+                    {
+                        uri: 'mapbox://styles/sofiayanezpg/clbgumxvh007m14rrxgnrlr10',
+                        title: '1990',
+                        className: 'style-1990'
+                    },
+                    {
+                        uri: 'mapbox://styles/sofiayanezpg/clbgwjcyl007u14rr9js3txt8',
+                        title: '1800',
+                        className: 'style-1800'
+                    },
+                    {
+                        uri: 'mapbox://styles/sofiayanezpg/clblgyy2e000414pihifg72bg',
+                        title: 'mechanism',
+                        className: 'style-mechanism'
+                    },
+                    {
+                        uri: 'mapbox://styles/sofiayanezpg/clblh6kjq000l14p5ipgslumu',
+                        title: 'pollution',
+                        className: 'style-pollution'
+                    },
+                    {
+                        uri: 'mapbox://styles/sofiayanezpg/clblhhmd5002d15ns63q9b10n',
+                        title: 'policy',
+                        className: 'style-policy'
+                    }
+
+
+
+                ]
+            }
+
+            ));
+        });
+
+
+        const popup = new mapboxgl.Popup({ offset: 25 }).setText('Flooded aceredo'
+        );
+        new mapboxgl.Marker({
+            scale: 0.5,
+            color: '#57fa7d',
+
         })
-         
-     .setLngLat([-8.114039093810108,41.89576005986305])
-     .setPopup(popup)
-     .addTo(map);
 
-     
-
-
-     
-
-
-    document.querySelector('#lindoso-dam').addEventListener('click', ()=> {
-    map.flyTo({
-        center: [-8.202513815106357,41.87212098595597],
-        zoom:17
-    })
-    })
+            .setLngLat([-8.114039093810108, 41.89576005986305])
+            .setPopup(popup)
+            .addTo(map);
 
 
 
 
-    document.querySelector('#as-conchas-dam').addEventListener('click', ()=> {
-    map.flyTo({
-        center: [-8.034951813166359,41.94427806825035],
-        zoom:17
-    })
-})
 
-    document.querySelector('#salas-dam').addEventListener('click', ()=> {
-    map.flyTo({
-        center: [-7.943911436672034,41.92327984811362],
-        zoom:17
-    })
-})
 
-document.querySelector('#mechanism-button').addEventListener('click', () => {
+
+        document.querySelector('#lindoso-dam').addEventListener('click', () => {
+            map.flyTo({
+                center: [-8.202513815106357, 41.87212098595597],
+                zoom: 17
+            })
+        })
+
+
+
+
+        document.querySelector('#as-conchas-dam').addEventListener('click', () => {
+            map.flyTo({
+                center: [-8.034951813166359, 41.94427806825035],
+                zoom: 17
+            })
+        })
+
+        document.querySelector('#salas-dam').addEventListener('click', () => {
+            map.flyTo({
+                center: [-7.943911436672034, 41.92327984811362],
+                zoom: 17
+            })
+        })
+
+        document.querySelector('#mechanism-button').addEventListener('click', () => {
             if (map.getLayer('mechanism-layer')) {
                 console.log('removing');
                 map.removeLayer('mechanism-layer');
@@ -276,7 +291,7 @@ document.querySelector('#mechanism-button').addEventListener('click', () => {
                         'fill-opacity': 0.5,
                     }
                 });
-                
+
                 if (!map.getSource('mechanism-data')) {
                     map.addSource('mechanism-data', {
                         type: 'geojson',
@@ -345,8 +360,111 @@ document.querySelector('#mechanism-button').addEventListener('click', () => {
 
 
 
-        
 
+        // parameters to ensure the model is georeferenced correctly on the map
+        const modelOrigin = [-8.114039093810108, 41.89576005986305];
+        const modelAltitude = 0;
+        const modelRotate = [Math.PI / 2, 0, 0];
+
+        const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
+            modelOrigin,
+            modelAltitude
+        );
+
+        // transformation parameters to position, rotate and scale the 3D model onto the map
+        const modelTransform = {
+            translateX: modelAsMercatorCoordinate.x,
+            translateY: modelAsMercatorCoordinate.y,
+            translateZ: modelAsMercatorCoordinate.z,
+            rotateX: modelRotate[0],
+            rotateY: modelRotate[1],
+            rotateZ: modelRotate[2],
+            /* Since the 3D model is in real world meters, a scale transform needs to be
+            * applied since the CustomLayerInterface expects units in MercatorCoordinates.
+            */
+            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
+        };
+
+        const THREE = window.THREE;
+
+        // configuration of the custom layer for a 3D model per the CustomLayerInterface
+        const customLayer = {
+            id: '3d-model',
+            type: 'custom',
+            renderingMode: '3d',
+            onAdd: function (map, gl) {
+                this.camera = new THREE.Camera();
+                this.scene = new THREE.Scene();
+
+                // create two three.js lights to illuminate the model
+                const directionalLight = new THREE.DirectionalLight(0xffffff);
+                directionalLight.position.set(0, -70, 100).normalize();
+                this.scene.add(directionalLight);
+
+                const directionalLight2 = new THREE.DirectionalLight(0xffffff);
+                directionalLight2.position.set(0, 70, 100).normalize();
+                this.scene.add(directionalLight2);
+
+                // use the three.js GLTF loader to add the 3D model to the three.js scene
+                const loader = new THREE.GLTFLoader();
+                loader.load(
+                    'church.gltf',
+                    (gltf) => {
+                        this.scene.add(gltf.scene);
+                    }
+                );
+                this.map = map;
+
+                // use the Mapbox GL JS map canvas for three.js
+                this.renderer = new THREE.WebGLRenderer({
+                    canvas: map.getCanvas(),
+                    context: gl,
+                    antialias: true
+                });
+
+                this.renderer.autoClear = false;
+            },
+            render: function (gl, matrix) {
+                const rotationX = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(1, 0, 0),
+                    modelTransform.rotateX
+                );
+                const rotationY = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(0, 1, 0),
+                    modelTransform.rotateY
+                );
+                const rotationZ = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(0, 0, 1),
+                    modelTransform.rotateZ
+                );
+
+                const m = new THREE.Matrix4().fromArray(matrix);
+                const l = new THREE.Matrix4()
+                    .makeTranslation(
+                        modelTransform.translateX,
+                        modelTransform.translateY,
+                        modelTransform.translateZ
+                    )
+                    .scale(
+                        new THREE.Vector3(
+                            modelTransform.scale,
+                            -modelTransform.scale,
+                            modelTransform.scale
+                        )
+                    )
+                    .multiply(rotationX)
+                    .multiply(rotationY)
+                    .multiply(rotationZ);
+
+                this.camera.projectionMatrix = m.multiply(l);
+                this.renderer.resetState();
+                this.renderer.render(this.scene, this.camera);
+                this.map.triggerRepaint();
+            }
+        };
+        map.on('style.load', () => {
+map.addLayer(customLayer);
+});
 
     </script>
 

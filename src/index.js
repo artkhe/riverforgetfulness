@@ -48,11 +48,14 @@ class StyleSwitcherControl {
         this._container.className = 'mapboxgl-ctrl mapbox-ctrl-styles';
 
         const currentStyle = map.getStyle().sprite.replace('sprites', 'styles');
-
+        const labelelement = document.createElement('div');
+        labelelement.className = 'label';
+        labelelement.appendChild(document.createTextNode('BASEMAPS'));
         const stylesElement = document.createElement('div');
         stylesElement.className = 'styles';
         const activeStylesElement = document.createElement('div');
         activeStylesElement.className = 'styles-current';
+        stylesElement.appendChild(labelelement);
         for (const style of this.styles) {
             const styleElement = document.createElement('div');
             styleElement.className = `style-button ${style.className}`;
@@ -66,6 +69,7 @@ class StyleSwitcherControl {
         }
         this._container.appendChild(stylesElement);
         this._container.appendChild(activeStylesElement);
+    
 
         this.registerDomEvents();
         return this._container;
