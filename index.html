@@ -227,9 +227,11 @@
             color: '#57fa7d',
 
         })
-
             .setLngLat([-8.114039093810108, 41.89576005986305])
-            .setPopup(popup)
+            .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                .setHTML(
+                    `<img src='http://via.placeholder.com/480x360'>`
+                ))
             .addTo(map);
 
 
@@ -262,9 +264,22 @@
             })
         })
 
+        let mechanismmarker =
+            new mapboxgl.Marker({
+                scale: 0.5,
+                color: '#57fa7d',
+
+            })
+                .setLngLat([-8.2044229, 41.8717993])
+                .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                    .setHTML(
+                        `<img src='http://via.placeholder.com/480x360'>`
+                    ));
         document.querySelector('#mechanism-button').addEventListener('click', () => {
+            window.mechanismmarker = mechanismmarker;
             if (map.getLayer('mechanism-layer')) {
                 console.log('removing');
+                mechanismmarker.remove();
                 map.removeLayer('mechanism-layer');
             } else {
                 console.log('adding');
@@ -292,6 +307,7 @@
                     }
                 });
 
+
                 if (!map.getSource('mechanism-data')) {
                     map.addSource('mechanism-data', {
                         type: 'geojson',
@@ -305,9 +321,7 @@
                 }
 
                 map.addLayer({
-                    id: 'mechanism-layer',
-                    // References the GeoJSON source defined above
-                    // and does not require a `source-layer`
+                    id: 'mechanism-layer-2',
                     source: 'mechanism-data-lines',
                     type: 'line',
                     paint: {
@@ -315,6 +329,9 @@
                         'line-width': 0.5,
                     }
                 });
+
+
+                mechanismmarker.addTo(map);
             }
         })
 
@@ -463,8 +480,8 @@
             }
         };
         map.on('style.load', () => {
-map.addLayer(customLayer);
-});
+            map.addLayer(customLayer);
+        });
 
     </script>
 
