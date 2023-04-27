@@ -329,8 +329,10 @@
                         'line-width': 0.5,
                     }
                 });
-
-
+                map.flyTo({
+                    center: [-8.043,41.928],
+                    zoom: 11.59
+                });
                 mechanismmarker.addTo(map);
             }
         })
@@ -371,6 +373,38 @@
                         'line-color': '#00ff00',
                         'line-width': 0.5,
                     }
+                });
+                map.flyTo({
+                    center: [-7.880, 42.001],
+                    zoom: 10.34
+                });
+            }
+        })
+
+        document.querySelector('#policy-button').addEventListener('click', () => {
+            if (map.getLayer('policy-layer')) {
+                console.log('removing');
+                map.removeLayer('policy-layer');
+            } else {
+                console.log('adding');
+                if (!map.getSource('policy-data')) {
+                    map.addSource('policy-data', {
+                        type: 'geojson',
+                        data: 'geojsons/bluebutton/blueline.geojson'
+                    });
+                }
+                map.addLayer({
+                    id: 'policy-layer-lines',
+                    source: 'policy-data',
+                    type: 'line',
+                    paint: {
+                        'line-color': ' #0F52BA',
+                        'line-width': 0.5,
+                    }
+                });
+                map.flyTo({
+                    center: [-5.360,40.724],
+                    zoom: 6.24
                 });
             }
         })
