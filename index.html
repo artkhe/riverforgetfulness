@@ -8,10 +8,13 @@
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'>
     </script>
     <script src='src/index.js'>
+
     </script>
+    <script src="https://unpkg.com/intro.js/intro.js"></script>
     <script src="https://unpkg.com/three@0.126.0/build/three.min.js"></script>
     <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+    <link href="https://unpkg.com/intro.js/introjs.css" rel="stylesheet" />
     <style>
         .mapbox-ctrl-styles {
             background-color: rgb(255, 255, 255);
@@ -116,8 +119,8 @@
             flex-shrink: 0;
             height: 100%;
             padding: 30px;
-            opacity: 50%;
-            background-color:white;
+            opacity: 100%;
+            background-color: white;
         }
 
         #topbar
@@ -130,23 +133,36 @@
 
     <div id="container">
         <div id="sidebar">
-            
-           <h1> LAYERS </h1> 
 
-           <br></br>
+            <h1> LAYERS </h1>
+
+            <br></br>
             <button id="pollution-button" style="padding: 8px">POLLUTION</button>
             <br></br>
             <button id="mechanism-button" style="padding: 8px">MECHANISM</button>
             <br></br>
-            <button id="policy-button" style="padding: 8px">POLICY</button>
+            <button id="policy-button" style="padding: 8px" style="font-style: italic">POLICY</button>
             <br></br>
             <br></br>
-            <br></br>
+            <h1> ROUTES </h1>
             <button id="lindoso-dam" style="padding: 8px">LINDOSO DAM</button>
             <br></br>
             <button id="as-conchas-dam" style="padding: 8px">AS CONCHAS DAM</button>
             <br></br>
             <button id="salas-dam" style="padding: 8px">SALAS DAM</button>
+            <br></br>
+            <br></br>
+            <h1> ELEMENTS OF RESISTANCE </h1>
+            <button id="church-" style="padding: 8px">church</button>
+            <br></br>
+            <button id="bridge-" style="padding: 8px">bridge</button>
+            <br></br>
+            <button id="boat-crossing" style="padding: 8px">Boat Crossing</button>
+            <br></br>
+            <br></br>
+            <br></br>
+            <button id="environment-" onclick="window.location.href='https://share.arcware.cloud/share-bc2a8d27-be0e-4516-a1eb-2eb2dae210da';" style="padding: 8px">Enter 3D Environment</button>
+
         </div>
 
 
@@ -241,7 +257,12 @@
 
 
 
-
+            document.querySelector('#church-').addEventListener('click', () => {
+            map.flyTo({
+                center: [-8.129,41.895],
+                zoom: 20
+            })
+        })
 
 
         document.querySelector('#lindoso-dam').addEventListener('click', () => {
@@ -334,7 +355,7 @@
                     }
                 });
                 map.flyTo({
-                    center: [-8.043,41.928],
+                    center: [-8.043, 41.928],
                     zoom: 11.59
                 });
                 mechanismmarker.addTo(map);
@@ -407,7 +428,7 @@
                     }
                 });
                 map.flyTo({
-                    center: [-5.360,40.724],
+                    center: [-5.360, 40.724],
                     zoom: 6.24
                 });
             }
@@ -520,6 +541,45 @@
         map.on('style.load', () => {
             map.addLayer(customLayer);
         });
+
+        introJs().setOptions({
+            steps: [{
+                intro: "Welcome to River Forgertfulnes' decentralisation tool, Click next to see the functions!"
+                
+            },
+
+            {
+                intro: "On the right you can find different basempas that represent different time periods",
+                element: document.querySelector('#mapbox-gl-style-switcher')
+            },
+            {
+                intro: "This are the different layers that can be switched on and off over the basemaps",
+                element: document.querySelector('#pollution-button')
+
+            },
+            {
+                intro: "Whith this buttons you can fly to the different Dams built on the Galician side of the Limia river",
+                element: document.querySelector('#lindoso-dam')
+
+            }
+            ,
+            {
+                intro: "Here you will access some of the many elemnts that are part of the valleys memory",
+                element: document.querySelector('#church-')
+
+            }
+            ,
+            {
+                intro: "Here you will access some of the many elemnts that are part of the valleys memory",
+                element: document.querySelector('#environment-')
+
+            }
+
+            
+            ]
+        }).start();
+
+
 
     </script>
 
