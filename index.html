@@ -161,7 +161,9 @@
             <br></br>
             <br></br>
             <br></br>
-            <button id="environment-" onclick="window.location.href='https://share.arcware.cloud/share-bc2a8d27-be0e-4516-a1eb-2eb2dae210da';" style="padding: 8px">Enter 3D Environment</button>
+            <button id="environment-"
+                onclick="window.location.href='https://share.arcware.cloud/share-bc2a8d27-be0e-4516-a1eb-2eb2dae210da';"
+                style="padding: 8px">Enter 3D Environment</button>
 
         </div>
 
@@ -171,6 +173,27 @@
 
 
     <script>
+        function waitForElm(selector) {
+            return new Promise(resolve => {
+                if (document.querySelector(selector)) {
+                    return resolve(document.querySelector(selector));
+                }
+
+                const observer = new MutationObserver(mutations => {
+                    if (document.querySelector(selector)) {
+                        resolve(document.querySelector(selector));
+                        observer.disconnect();
+                    }
+                });
+
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        }
+
+
         const mapEl = document.createElement('div');
         mapEl.setAttribute('id', 'map');
         document.body.appendChild(mapEl);
@@ -237,6 +260,45 @@
             }
 
             ));
+
+            waitForElm("#styles-basemaps").then(() => {
+                introJs().setOptions({
+                    steps: [{
+                        intro: "Welcome to River Forgertfulnes' decentralisation tool, Click next to see the functions!"
+
+                    },
+
+                    {
+                        intro: "On the right you can find different basempas that represent different time periods",
+                        element: document.querySelector('#styles-basemaps')
+                    },
+                    {
+                        intro: "This are the different layers that can be switched on and off over the basemaps",
+                        element: document.querySelector('#pollution-button')
+
+                    },
+                    {
+                        intro: "Whith this buttons you can fly to the different Dams built on the Galician side of the Limia river",
+                        element: document.querySelector('#lindoso-dam')
+
+                    }
+                        ,
+                    {
+                        intro: "Here you will access some of the many elemnts that are part of the valleys memory",
+                        element: document.querySelector('#church-')
+
+                    }
+                        ,
+                    {
+                        intro: "Here you will access some of the many elemnts that are part of the valleys memory",
+                        element: document.querySelector('#environment-')
+
+                    }
+
+
+                    ]
+                }).start();
+            });
         });
 
 
@@ -257,9 +319,9 @@
 
 
 
-            document.querySelector('#church-').addEventListener('click', () => {
+        document.querySelector('#church-').addEventListener('click', () => {
             map.flyTo({
-                center: [-8.129,41.895],
+                center: [-8.129, 41.895],
                 zoom: 20
             })
         })
@@ -542,42 +604,6 @@
             map.addLayer(customLayer);
         });
 
-        introJs().setOptions({
-            steps: [{
-                intro: "Welcome to River Forgertfulnes' decentralisation tool, Click next to see the functions!"
-                
-            },
-
-            {
-                intro: "On the right you can find different basempas that represent different time periods",
-                element: document.querySelector('#mapbox-gl-style-switcher')
-            },
-            {
-                intro: "This are the different layers that can be switched on and off over the basemaps",
-                element: document.querySelector('#pollution-button')
-
-            },
-            {
-                intro: "Whith this buttons you can fly to the different Dams built on the Galician side of the Limia river",
-                element: document.querySelector('#lindoso-dam')
-
-            }
-            ,
-            {
-                intro: "Here you will access some of the many elemnts that are part of the valleys memory",
-                element: document.querySelector('#church-')
-
-            }
-            ,
-            {
-                intro: "Here you will access some of the many elemnts that are part of the valleys memory",
-                element: document.querySelector('#environment-')
-
-            }
-
-            
-            ]
-        }).start();
 
 
 
