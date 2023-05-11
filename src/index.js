@@ -47,7 +47,7 @@ class StyleSwitcherControl {
     const currentStyle = map.getStyle().sprite.replace('sprites', 'styles');
     const labelelement = document.createElement('div');
     labelelement.className = 'label';
-    labelelement.style = 'font-size: 48px';
+    labelelement.style = 'font-size: 12px'; 
     const basemapsNode = document.createTextNode('BASEMAPS');
     labelelement.appendChild(basemapsNode);
     const stylesElement = document.createElement('div');
