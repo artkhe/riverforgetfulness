@@ -332,6 +332,13 @@
             })
     
         })
+        document.querySelector('#boat-crossing').addEventListener('click', () => {
+            map.flyTo({
+                center: [-8.159,41.887],
+                zoom: 20
+            })
+        })
+        
 
         document.querySelector('#lindoso-dam').addEventListener('click', () => {
             map.flyTo({
@@ -558,7 +565,7 @@
                     }
                 );
                 loader.load(
-                    'church.gltf',
+                    'cafe.gltf',
                     (gltf) => {
                         this.scene.add(gltf.scene);
                     }
