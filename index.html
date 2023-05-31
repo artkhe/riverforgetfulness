@@ -319,9 +319,10 @@
 
 
         document.querySelector('#church-').addEventListener('click', () => {
+            map.setStyle('mapbox://styles/sofiayanezpg/cli8w77v100sr01pg38a62y2u');
             map.flyTo({
                 center: [-8.123,41.896],
-                zoom: 20
+                zoom: 17
             })
         })
         document.querySelector('#bridge-').addEventListener('click', () => {
@@ -333,9 +334,10 @@
     
         })
         document.querySelector('#boat-crossing').addEventListener('click', () => {
+            map.setStyle('mapbox://styles/sofiayanezpg/cli8w77v100sr01pg38a62y2u');
             map.flyTo({
                 center: [-8.159,41.887],
-                zoom: 20
+                zoom: 22
             })
         })
         
@@ -373,8 +375,8 @@
                 .setLngLat([-8.2044229, 41.8717993])
                 .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
                     .setHTML(
-                        `<img src='http://via.placeholder.com/480x360'>`
-                    ));
+                        `<img src='Artboard1.jpg'>`
+                    ));  
         document.querySelector('#mechanism-button').addEventListener('click', () => {
             window.mechanismmarker = mechanismmarker;
             if (map.getLayer('mechanism-layer')) {
@@ -406,19 +408,6 @@
                         'fill-opacity': 0.5,
                     }
                 });
-
-
-                if (!map.getSource('mechanism-data')) {
-                    map.addSource('mechanism-data', {
-                        type: 'geojson',
-                        data: 'geojsons/redbutton/redpoli.geojson'
-                    });
-
-                    map.addSource('mechanism-data-lines', {
-                        type: 'geojson',
-                        data: 'geojsons/redbutton/redline.geojson'
-                    });
-                }
 
                 map.addLayer({
                     id: 'mechanism-layer-2',
@@ -467,7 +456,7 @@
 
                 map.addLayer({
                     id: 'pollution-layer-lines',
-                    source: 'pollution-data',
+                    source: 'pollution-data-lines',
                     type: 'line',
                     paint: {
                         'line-color': '#00ff00',
@@ -564,12 +553,7 @@
                         this.scene.add(gltf.scene);
                     }
                 );
-                loader.load(
-                    'cafe.gltf',
-                    (gltf) => {
-                        this.scene.add(gltf.scene);
-                    }
-                );
+
                 this.map = map;
 
                 // use the Mapbox GL JS map canvas for three.js
@@ -619,8 +603,114 @@
                 this.map.triggerRepaint();
             }
         };
+
+        // parameters to ensure the model is georeferenced correctly on the map
+        const modelOriginCafe = [-8.159,41.887];
+        const modelAltitudeCafe = 0;
+        const modelRotateCafe = [Math.PI / 2, 0, 0];
+
+        const modelAsMercatorCoordinateCafe = mapboxgl.MercatorCoordinate.fromLngLat(
+            modelOriginCafe,
+            modelAltitudeCafe
+        );
+
+        // transformation parameters to position, rotate and scale the 3D model onto the map
+        const modelTransformCafe = {
+            translateX: modelAsMercatorCoordinateCafe.x,
+            translateY: modelAsMercatorCoordinateCafe.y,
+            translateZ: modelAsMercatorCoordinateCafe.z,
+            rotateX: modelRotateCafe[0],
+            rotateY: modelRotateCafe[1],
+            rotateZ: modelRotateCafe[2],
+            /* Since the 3D model is in real world meters, a scale transform needs to be
+            * applied since the CustomLayerInterface expects units in MercatorCoordinates.
+            */
+            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
+        };
+        const customLayerCafe = {
+            id: '3d-model-cafe',
+            type: 'custom',
+            renderingMode: '3d',
+            onAdd: function (map, gl) {
+                this.camera = new THREE.Camera();
+                this.scene = new THREE.Scene();
+
+                // create two three.js lights to illuminate the model
+                const directionalLight = new THREE.DirectionalLight(0xffffff);
+                directionalLight.position.set(0, -70, 100).normalize();
+                this.scene.add(directionalLight);
+
+                const directionalLight2 = new THREE.DirectionalLight(0xffffff);
+                directionalLight2.position.set(0, 70, 100).normalize();
+                this.scene.add(directionalLight2);
+
+                // use the three.js GLTF loader to add the 3D model to the three.js scene
+                const loader = new THREE.GLTFLoader();
+                loader.load(
+                    'cafe.gltf',
+                    (gltf) => {
+                        this.scene.add(gltf.scene);
+                    }
+                );
+                loader.load(
+                    'bridge.gltf',
+                    (gltf) => {
+                        this.scene.add(gltf.scene);
+                    }
+                );
+
+                this.map = map;
+
+                // use the Mapbox GL JS map canvas for three.js
+                this.renderer = new THREE.WebGLRenderer({
+                    canvas: map.getCanvas(),
+                    context: gl,
+                    antialias: true
+                });
+
+                this.renderer.autoClear = false;
+            },
+            render: function (gl, matrix) {
+                const rotationXCafe = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(1, 0, 0),
+                    modelTransformCafe.rotateX
+                );
+                const rotationYCafe = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(0, 1, 0),
+                    modelTransformCafe.rotateY
+                );
+                const rotationZCafe = new THREE.Matrix4().makeRotationAxis(
+                    new THREE.Vector3(0, 0, 1),
+                    modelTransformCafe.rotateZ
+                );
+
+                const m = new THREE.Matrix4().fromArray(matrix);
+                const l = new THREE.Matrix4()
+                    .makeTranslation(
+                        modelTransformCafe.translateX,
+                        modelTransformCafe.translateY,
+                        modelTransformCafe.translateZ
+                    )
+                    .scale(
+                        new THREE.Vector3(
+                            modelTransformCafe.scale,
+                            -modelTransformCafe.scale,
+                            modelTransformCafe.scale
+                        )
+                    )
+                    .multiply(rotationXCafe)
+                    .multiply(rotationYCafe)
+                    .multiply(rotationZCafe);
+
+                this.camera.projectionMatrix = m.multiply(l);
+                this.renderer.resetState();
+                this.renderer.render(this.scene, this.camera);
+                this.map.triggerRepaint();
+            }
+        };
         map.on('style.load', () => {
             map.addLayer(customLayer);
+            map.addLayer(customLayerCafe);
         });
 
 
