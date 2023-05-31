@@ -161,7 +161,7 @@
             <br></br>
             <br></br>
             <button id="environment-"
-                onclick="window.location.href='https://share.arcware.cloud/share-bc2a8d27-be0e-4516-a1eb-2eb2dae210da';"
+                onclick="window.location.href='https://share.arcware.cloud/share-2cce93bb-0ef1-4d9a-80ee-2b33c5d41e2b';"
                 style="padding: 8px">ENTER 3D ENVIRONMENT</button>
 
         </div>
@@ -320,11 +320,18 @@
 
         document.querySelector('#church-').addEventListener('click', () => {
             map.flyTo({
-                center: [-8.129, 41.895],
+                center: [-8.123,41.896],
                 zoom: 20
             })
         })
-
+        document.querySelector('#bridge-').addEventListener('click', () => {
+            map.setStyle('mapbox://styles/sofiayanezpg/cli8w77v100sr01pg38a62y2u');
+            map.flyTo({
+                center: [-8.143,41.892],
+                zoom: 14.85
+            })
+    
+        })
 
         document.querySelector('#lindoso-dam').addEventListener('click', () => {
             map.flyTo({
@@ -499,7 +506,7 @@
 
 
         // parameters to ensure the model is georeferenced correctly on the map
-        const modelOrigin = [-8.114039093810108, 41.89576005986305];
+        const modelOrigin = [-8.123,41.896];
         const modelAltitude = 0;
         const modelRotate = [Math.PI / 2, 0, 0];
 
@@ -544,6 +551,12 @@
 
                 // use the three.js GLTF loader to add the 3D model to the three.js scene
                 const loader = new THREE.GLTFLoader();
+                loader.load(
+                    'church.gltf',
+                    (gltf) => {
+                        this.scene.add(gltf.scene);
+                    }
+                );
                 loader.load(
                     'church.gltf',
                     (gltf) => {
